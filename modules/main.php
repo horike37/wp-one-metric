@@ -25,13 +25,23 @@ class WP_One_Metric {
 		}
 		
 		$this->posts = $posts;
+//analyze debug
+//		add_action( 'admin_init', array( $this, 'analyze' ) );
 
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'wp_one_metric', array( $this, 'analyze' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_print_scripts',  array( $this, 'admin_print_scripts' ) );
 		add_filter( 'manage_posts_columns', array( $this, 'manage_posts_columns' ) );
 		add_filter( 'manage_edit-post_sortable_columns', array( $this, 'manage_edit_sortable_columns' ) );
+	}
+	
+	public function admin_init() {
+		if ( isset($_POST['wp_metric_analyze']) ) {
+			check_admin_referer('wp_metric_analyze');
+			$this->analyze();
+		}
 	}
 	
 	public function admin_menu() {
@@ -46,7 +56,10 @@ class WP_One_Metric {
 <h2><?php _e( 'WP One Metric Analytics', WPOMC_DOMAIN ); ?></h2>
 
 <div id="one-metric" style="height: 400px;"></div>
-
+<form action="" method="post">
+<?php wp_nonce_field('wp_metric_analyze'); ?>
+<?php submit_button(__('Analyze'), 'primary', 'wp_metric_analyze'); ?>
+</form>
 </div>
 <?php
 	}
@@ -76,7 +89,7 @@ new Morris.Bar({
   ykeys: ['value'],
   // Labels for the ykeys -- will be displayed when you hover over the
   // chart.
-  labels: ['Value'],
+  labels: ['One Metric'],
 
 });
 </script>
@@ -101,8 +114,7 @@ new Morris.Bar({
 		$ids = array();
 		foreach ( $this->posts as $post ) {
 			$ids[] = $post->ID;
-		}
-		
+		}	
 		$options = get_option('wpomc_options');
 		try {
     		$ga = new gapi( $options['email'], $options['pass'] );
@@ -119,24 +131,27 @@ new Morris.Bar({
     		);
 
     		$sum = 0;
-    		$cnt = 0;
+    		$uniquepageviews = array();
     		foreach($ga->getResults() as $result) {
-
     			$post_id = url_to_postid(esc_url($result->getPagepath()));
    			
     			if ( $post_id == 0 )
     				continue;
 			
-    			if ( array_search( $post_id, $ids ) ) {
-    				$cnt++;
+    			if ( in_array( $post_id, $ids ) ) {
     				$sum = $sum + $result->getUniquepageviews();
-    				$this->results[$post_id]['uniquepageviews'] = $result->getUniquepageviews();
+    				if ( isset($uniquepageviews[$post_id]) ) {
+    					$uniquepageviews[$post_id] = $uniquepageviews[$post_id] + $result->getUniquepageviews();
+    				} else {
+	    				$uniquepageviews[$post_id] = $result->getUniquepageviews();
+    				}
     			}
     		}
-    		
-    		if ( $cnt != 0 ) {
-    			$this->ga_index = $sum / $cnt;
+    		foreach ( $this->posts as $post ) {
+    			$this->results[$post->ID]['uniquepageviews'] = $uniquepageviews[$post->ID];
     		}
+ 			$this->ga_index = $sum / $this->target_num;
+
 
     	} catch (Exception $e) {
     		echo( 'Analytics API Error: ' . $e->getMessage() );
@@ -155,6 +170,7 @@ new Morris.Bar({
 				$response_body = json_decode($response["body"]);
 				$sum = $sum + intval($response_body->count);
 				$this->results[$post->ID]['twitter'] = intval($response_body->count);
+
 			} else {
 				// Handle error here.
 			}
@@ -167,7 +183,6 @@ new Morris.Bar({
 		
 		$urls = array();
 		$sum = 0;
-		$cnt = 0;
 		foreach ( $this->posts as $post ) {
 			$url = get_permalink($post->ID);
 			$response = wp_remote_get('http://graph.facebook.com/'.$url);
@@ -175,15 +190,16 @@ new Morris.Bar({
 				$response_body = json_decode($response["body"]);
 				if ( property_exists($response_body, 'shares') ) {
 					$sum = $sum + intval($response_body->shares);
-					$cnt++;
 					$this->results[$post->ID]['facebook'] = intval($response_body->shares);
+				} else {
+					$this->results[$post->ID]['facebook'] = 0;
 				}
 				
 			} else {
 				// Handle error here.
 			}
 		}
-		$this->facebook_index = $sum / $cnt;
+		$this->facebook_index = $sum / $this->target_num;
 	}
 	
 	public function analyze() {
@@ -192,7 +208,7 @@ new Morris.Bar({
 		$this->get_facebook_index();
 		
 		foreach ( $this->results as $key => $val ) {
-			$data = (1/2)*($val['uniquepageviews']/$this->ga_index) + (1/2)*((($val['twitter']/$this->twitter_index)+($val['facebook']/$this->facebook_index)))/2;
+			$data = (0.5)*($val['uniquepageviews']/$this->ga_index) + (0.5)*(($val['twitter']/$this->twitter_index)+($val['facebook']/$this->facebook_index))*(0.5);
 			$this->results[$key]['metric'] = 27*log($data)+50;
 			update_post_meta( $key, '_wp_one_metric', $this->results[$key]['metric'] );
 		}

@@ -34,7 +34,7 @@ function wpomc_admin_init() {
 	add_settings_field( 'wpomc_pass', __( 'Password', WPOMC_DOMAIN ), 'wpomc_setting_pass',
 		'wpomc', 'wpomc_main' );
 
-	add_settings_field( 'wpomc_profile_id',  __( 'Profile ID', WPOMC_DOMAIN ), 'wpomc_setting_profile_id',
+	add_settings_field( 'wpomc_profile_id',  __( 'View ID', WPOMC_DOMAIN ), 'wpomc_setting_profile_id',
 		'wpomc', 'wpomc_main' );
 
 }
