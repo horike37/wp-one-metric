@@ -53,7 +53,7 @@ class WP_One_Metric {
 <div class="wrap">
 <?php screen_icon(); ?>
 
-<h2><?php _e( 'WP One Metric Analytics', WPOMC_DOMAIN ); ?></h2>
+<h2><?php _e( 'WP One Metric', WPOMC_DOMAIN ); ?></h2>
 
 <div id="one-metric" style="height: 400px;"></div>
 <form action="" method="post">
