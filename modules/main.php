@@ -45,7 +45,7 @@ class WP_One_Metric {
 	}
 	
 	public function admin_menu() {
-		add_dashboard_page( __( 'WP One Metric Analytics', WPOMC_DOMAIN ), __( 'WP One Metric Analytics', WPOMC_DOMAIN ), 'manage_options', 'wpomc-dash', array($this, 'dashboard') );
+		add_dashboard_page( __( 'WP One Metric', WPOMC_DOMAIN ), __( 'WP One Metric', WPOMC_DOMAIN ), 'manage_options', 'wpomc-dash', array($this, 'dashboard') );
 	}
 	
 	public function dashboard() {
