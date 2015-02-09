@@ -39,3 +39,7 @@ if ( !class_exists( 'gapi' ) ) {
 }
 require_once( WPOMC_PLUGIN_DIR . '/modules/admin.php' );
 require_once( WPOMC_PLUGIN_DIR . '/modules/main.php' );
+
+$wp_one_metric = new WP_One_Metric();
+register_activation_hook( __FILE__, array( $wp_one_metric, 'set_event' ) );
+register_deactivation_hook( __FILE__, array( $wp_one_metric, 'delete_event' ) );

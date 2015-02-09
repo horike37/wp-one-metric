@@ -1,13 +1,5 @@
 <?php
-add_action('admin_print_scripts', 'wpomc_admin_scripts');
-function wpomc_admin_scripts() {
-	wp_enqueue_style('morris_css', '//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css');
-	wp_enqueue_script('raphael_js', '//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js', false, '1.0');
-	wp_enqueue_script('morris_js', '//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js', false, '1.0');
-}
-
 add_action( 'admin_menu', 'wpomc_admin_menu' );
-
 function wpomc_admin_menu() {
 	add_options_page( __( 'WP One Metric Setting', WPOMC_DOMAIN ), __( 'WP One Metric Setting', WPOMC_DOMAIN ), 'manage_options', 'wpomc', 'wpomc_options_page');
 }
@@ -25,8 +17,6 @@ function wpomc_options_page() {
 
 <p class="submit"><input name="Submit" type="submit" value="<?php _e( 'save', WPOMC_DOMAIN ) ?>" class="button-primary" /></p>
 </form>
-
-<div id="one-metric" style="height: 250px;"></div>
 
 </div>
 <?php

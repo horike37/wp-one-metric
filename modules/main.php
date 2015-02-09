@@ -5,6 +5,8 @@ class WP_One_Metric {
 	private $ga_index = 0;
 	private $twitter_index = 0;
 	private $facebook_index = 0;
+	private $results = array();
+	private $metrics = array();
 
 	public function __construct() {
 		$args = array( 
@@ -17,14 +19,45 @@ class WP_One_Metric {
 			return;
 		}
 		
+		$posts = array_reverse($posts);
 		foreach ( $posts as $post ) {
-			$this->posts[$post->ID] = array();
+			$this->metrics[$post->ID] = get_post_meta( $post->ID, '_wp_one_metric', true );
 		}
-		add_action( 'admin_init', array( $this, 'get_index' ) );
-		add_action( 'admin_footer', array( $this, 'admin_head' ) );
+		
+		$this->posts = $posts;
+
+		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
+		add_action( 'wp_one_metric', array( $this, 'analyze' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_print_scripts',  array( $this, 'admin_print_scripts' ) );
+		add_filter( 'manage_posts_columns', array( $this, 'manage_posts_columns' ) );
+		add_filter( 'manage_edit-post_sortable_columns', array( $this, 'manage_edit_sortable_columns' ) );
 	}
 	
-	public function admin_head() {
+	public function admin_menu() {
+		add_dashboard_page( __( 'WP One Metric Analytics', WPOMC_DOMAIN ), __( 'WP One Metric Analytics', WPOMC_DOMAIN ), 'manage_options', 'wpomc-dash', array($this, 'dashboard') );
+	}
+	
+	public function dashboard() {
+?>
+<div class="wrap">
+<?php screen_icon(); ?>
+
+<h2><?php _e( 'WP One Metric Analytics', WPOMC_DOMAIN ); ?></h2>
+
+<div id="one-metric" style="height: 400px;"></div>
+
+</div>
+<?php
+	}
+	
+	public function admin_print_scripts() {
+		wp_enqueue_style('morris_css', '//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css');
+		wp_enqueue_script('raphael_js', '//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js', false, '1.0');
+		wp_enqueue_script('morris_js', '//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js', false, '1.0');
+	}
+	
+	public function admin_footer() {
 ?>
 <script>
 new Morris.Bar({
@@ -33,8 +66,8 @@ new Morris.Bar({
   // Chart data records -- each entry in this array corresponds to a point on
   // the chart.
   data: [
-  <?php foreach( $this->posts as $key => $val ): ?>
-    { post_id: <?php echo esc_js(intval($key)); ?>, value: <?php echo esc_js(intval($val['metric'])); ?> },
+  <?php foreach( $this->metrics as $key => $val ): ?>
+    { post_id: '<?php echo get_the_title($key); ?>', value: <?php echo esc_js(intval($val)); ?> },
   <?php endforeach; ?>
   ],
   // The name of the data record attribute that contains x-values.
@@ -50,20 +83,23 @@ new Morris.Bar({
 <?php
 	}
 	
+	public function set_event() {
+		if ( wp_next_scheduled( 'wp_one_metric' ) )
+			wp_clear_scheduled_hook( 'wp_one_metric' );
+
+		wp_schedule_event( time(), 'daily', 'wp_one_metric' );
+	}
+	
+	public function delete_event() {
+		if ( wp_next_scheduled( 'wp_one_metric' ) )
+			wp_clear_scheduled_hook( 'wp_one_metric' );
+	}
+	
 	public function get_ga_index() {
 		$ga_index = 0;
-		$args = array( 
-					'post_type' => 'post',
-					'posts_per_page' => $this->target_num
-					 );
-		$posts = get_posts($args);
-		
-		if ( empty($posts) ) {
-			return;
-		}
 		
 		$ids = array();
-		foreach ( $posts as $post ) {
+		foreach ( $this->posts as $post ) {
 			$ids[] = $post->ID;
 		}
 		
@@ -85,15 +121,16 @@ new Morris.Bar({
     		$sum = 0;
     		$cnt = 0;
     		foreach($ga->getResults() as $result) {
+
     			$post_id = url_to_postid(esc_url($result->getPagepath()));
-    			
+   			
     			if ( $post_id == 0 )
     				continue;
 			
     			if ( array_search( $post_id, $ids ) ) {
     				$cnt++;
     				$sum = $sum + $result->getUniquepageviews();
-    				$this->posts[$post_id]['uniquepageviews'] = $result->getUniquepageviews();
+    				$this->results[$post_id]['uniquepageviews'] = $result->getUniquepageviews();
     			}
     		}
     		
@@ -108,26 +145,16 @@ new Morris.Bar({
 	
 	public function get_twitter_index() {
 		$twitter_index = 0;
-		$args = array( 
-					'post_type' => 'post',
-					'posts_per_page' => $this->target_num
-					 );
-		$posts = get_posts($args);
-		
-		if ( empty($posts) ) {
-			return;
-		}
 		
 		$urls = array();
 		$sum = 0;
-		foreach ( $posts as $post ) {
+		foreach ( $this->posts as $post ) {
 			$url = get_permalink($post->ID);
-
 			$response = wp_remote_get('http://urls.api.twitter.com/1/urls/count.json?url='.$url);
 			if( !is_wp_error( $response ) && $response["response"]["code"] === 200 ) {
 				$response_body = json_decode($response["body"]);
 				$sum = $sum + intval($response_body->count);
-				$this->posts[$post->ID]['twitter'] = intval($response_body->count);
+				$this->results[$post->ID]['twitter'] = intval($response_body->count);
 			} else {
 				// Handle error here.
 			}
@@ -137,29 +164,19 @@ new Morris.Bar({
 	
 	public function get_facebook_index() {
 		$facebook_index = 0;
-		$args = array( 
-					'post_type' => 'post',
-					'posts_per_page' => $this->target_num
-					 );
-		$posts = get_posts($args);
-		
-		if ( empty($posts) ) {
-			return;
-		}
 		
 		$urls = array();
 		$sum = 0;
 		$cnt = 0;
-		foreach ( $posts as $post ) {
+		foreach ( $this->posts as $post ) {
 			$url = get_permalink($post->ID);
-
 			$response = wp_remote_get('http://graph.facebook.com/'.$url);
 			if( !is_wp_error( $response ) && $response["response"]["code"] === 200 ) {
 				$response_body = json_decode($response["body"]);
 				if ( property_exists($response_body, 'shares') ) {
 					$sum = $sum + intval($response_body->shares);
 					$cnt++;
-					$this->posts[$post->ID]['facebook'] = intval($response_body->shares);
+					$this->results[$post->ID]['facebook'] = intval($response_body->shares);
 				}
 				
 			} else {
@@ -169,16 +186,41 @@ new Morris.Bar({
 		$this->facebook_index = $sum / $cnt;
 	}
 	
-	public function get_index() {
+	public function analyze() {
 		$this->get_ga_index();
 		$this->get_twitter_index();
 		$this->get_facebook_index();
 		
-		foreach ( $this->posts as $key => $val ) {
-			$data = (1/2)*($val['uniquepageviews']/$this->ga_index) + (1/2)*((($val['twitter']/$this->twitter_index)+($val['twitter']/$this->twitter_index)))/2;
-			$this->posts[$key]['metric'] = 27*log($data)+50;
+		foreach ( $this->results as $key => $val ) {
+			$data = (1/2)*($val['uniquepageviews']/$this->ga_index) + (1/2)*((($val['twitter']/$this->twitter_index)+($val['facebook']/$this->facebook_index)))/2;
+			$this->results[$key]['metric'] = 27*log($data)+50;
+			update_post_meta( $key, '_wp_one_metric', $this->results[$key]['metric'] );
 		}
 		
 	}
+	
+	public function manage_posts_columns( $posts_columns ) {
+		$new_columns = array();
+		foreach ( $posts_columns as $column_name => $column_display_name ) {
+			if ( $column_name == 'date' ) {
+				$new_columns['wp_one_metric'] = __( 'One Metric', WPOMC_DOMAIN );
+				add_action( 'manage_posts_custom_column', array($this, 'add_column'), 10, 2 );
+			}
+			$new_columns[$column_name] = $column_display_name;
+		}
+		return $new_columns;
+	}
+	
+	public function add_column($column_name, $post_id) {
+
+		if ( $column_name == 'wp_one_metric') {
+			echo intval(get_post_meta( $post_id, '_wp_one_metric', true ));
+		}
+	}
+	
+	public function manage_edit_sortable_columns($sortable_column) {
+		$sortable_column['wp_one_metric'] = 'wp_one_metric';
+		return $sortable_column;
+	}
 }
-new WP_One_Metric();
+
