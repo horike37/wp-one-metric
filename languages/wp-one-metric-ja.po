@@ -1,0 +1,73 @@
+# Copyright (C) 2015 WP One Metric
+# This file is distributed under the same license as the WP One Metric package.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP One Metric 1.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-one-metric\n"
+"POT-Creation-Date: 2015-02-11 08:50:41+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: modules/admin.php:4 modules/admin.php:12
+msgid "WP One Metric Setting"
+msgstr ""
+
+#: modules/admin.php:18
+msgid "save"
+msgstr "保存"
+
+#: modules/admin.php:29
+msgid "Google Analytics Setting"
+msgstr ""
+
+#: modules/admin.php:31
+msgid "E-Mail"
+msgstr "メールアドレス"
+
+#: modules/admin.php:34
+msgid "Password"
+msgstr "パスワード"
+
+#: modules/admin.php:37
+msgid "View ID"
+msgstr "ビューID"
+
+#: modules/admin.php:61
+msgid "Please input View ID in Admin > Veiw Setting on Google Analytics"
+msgstr "Google Analyticsの「アナリティクス設定 > ビュー設定」にあるビューIDを入力してください"
+
+#. #-#-#-#-#  wp-one-metric.pot (WP One Metric 1.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: modules/main.php:48 modules/main.php:56
+msgid "WP One Metric"
+msgstr ""
+
+#: modules/main.php:61
+msgid "Analyze"
+msgstr "解析"
+
+#: modules/main.php:222
+msgid "One Metric"
+msgstr ""
+
+#. #-#-#-#-#  wp-one-metric.pot (WP One Metric 1.0)  #-#-#-#-#
+#. Plugin URI of the plugin/theme
+#. #-#-#-#-#  wp-one-metric.pot (WP One Metric 1.0)  #-#-#-#-#
+#. Author URI of the plugin/theme
+msgid "https://github.com/horike37/wp-one-metric"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"<a href=\"http://moz.com/blog/one-metric\" target=\"__blank\">One Content "
+"Metric to Rule Them All</a>の指標に基づき、コンテンツの評価を可視化する事がで"
+"きるプラグインです。"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "horike"
+msgstr ""

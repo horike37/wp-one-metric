@@ -58,7 +58,7 @@ class WP_One_Metric {
 <div id="one-metric" style="height: 400px;"></div>
 <form action="" method="post">
 <?php wp_nonce_field('wp_metric_analyze'); ?>
-<?php submit_button(__('Analyze'), 'primary', 'wp_metric_analyze'); ?>
+<?php submit_button(__('Analyze', WPOMC_DOMAIN), 'primary', 'wp_metric_analyze'); ?>
 </form>
 </div>
 <?php

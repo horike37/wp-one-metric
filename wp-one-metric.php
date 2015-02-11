@@ -1,14 +1,14 @@
 <?php 
 /*
 Plugin Name: WP One Metric
-Plugin URI: http://digitalcube.jp
-Description: 
+Plugin URI: https://github.com/horike37/wp-one-metric
+Description: <a href="http://moz.com/blog/one-metric" target="__blank">One Content Metric to Rule Them All</a>の指標に基づき、コンテンツの評価を可視化する事ができるプラグインです。
 Author: horike
 Version: 1.0
-Author URI: http://digitalcube.jp
+Author URI: https://github.com/horike37/wp-one-metric
+Domain Path: /languages
 
-
-Copyright 2014 Digitalcube (email : info@digitalcube.jp)
+Copyright 2014 Takahiro Horike (email : horike37@gmail.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,13 +26,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 if ( ! defined( 'WPOMC_DOMAIN' ) )
-	define( 'WPOMC_DOMAIN', '' );
+	define( 'WPOMC_DOMAIN', 'wp-one-metric' );
 	
 if ( ! defined( 'WPOMC_PLUGIN_URL' ) )
 	define( 'WPOMC_PLUGIN_URL', plugins_url() . '/' . dirname( plugin_basename( __FILE__ ) ));
 
 if ( ! defined( 'WPOMC_PLUGIN_DIR' ) )
 	define( 'WPOMC_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . dirname( plugin_basename( __FILE__ ) ));
+
+load_plugin_textdomain( WPOMC_DOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages' );
 
 if ( !class_exists( 'gapi' ) ) {
 	require_once( WPOMC_PLUGIN_DIR . '/lib/gapi.class.php' );
