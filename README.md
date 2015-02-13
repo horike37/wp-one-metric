@@ -1,8 +1,6 @@
 # WP One Metric
 Welcome to the official repository for WP One Metric WordPress plugin. The latest stable version is available from the [WordPress Plugin Directory](https://wordpress.org/plugins/wp-one-metric/).
 
-This WordPress pulgin visualizes the evaluation of your post content.
-
 # Description
 This plugins visualizes the evaluation of your post content based on the score of [One Content Metric to Rule Them All](http://moz.com/blog/one-metric).
 This analyzes the latest 40 posts. After that, it analyzes once a day and automatically update the score.
