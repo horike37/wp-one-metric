@@ -1,9 +1,5 @@
 # WP One Metric
-Contributors: horike,megumithemes
-Tags: google analytics
-Requires at least: 4.1
-Tested up to: 4.1
-Stable tag: 1.0
+Welcome to the official repository for WP One Metric WordPress plugin. The latest stable version is available from the [WordPress Plugin Directory](https://wordpress.org/plugins/wp-one-metric/).
 
 This WordPress pulgin visualizes the evaluation of your post content.
 
