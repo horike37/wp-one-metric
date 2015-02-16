@@ -58,7 +58,7 @@ function wpomc_setting_profile_id() {
 	$options = get_option( 'wpomc_options' );
 
 	echo '<input id="wpomc_user_profile_id" name="wpomc_options[profile_id]" size="40" type="text" value="' . esc_attr( $options['profile_id'] ) . '" /><br />';
-	_e('Please input View ID in Admin > Veiw Setting on Google Analytics', WPOMC_DOMAIN);
+	_e('Please input View ID in Admin > View Setting on Google Analytics', WPOMC_DOMAIN);
 }
 
 function wpomc_options_validate( $input ) {
