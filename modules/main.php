@@ -35,8 +35,55 @@ class WP_One_Metric {
 		add_action( 'admin_print_scripts',  array( $this, 'admin_print_scripts' ) );
 		add_filter( 'manage_posts_columns', array( $this, 'manage_posts_columns' ) );
 		add_filter( 'manage_edit-post_sortable_columns', array( $this, 'manage_edit_sortable_columns' ) );
+		add_action( 'restrict_manage_posts', array( $this, 'restrict_manage_posts' ) );
+		add_action( 'admin_init', array( $this, 'csv' ) );
 	}
 	
+	public function csv() {
+		$nonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : '';
+		if ( !wp_verify_nonce( $nonce, 'wp_metric_csv') ) {
+			return;
+		}
+		
+		$file_name = 'user_'.time().'.csv';
+		$title = array();
+		$title[] = __('ID');
+		$title[] = __('Title');
+		$title[] = __('Metric', WPOMC_DOMAIN);
+		$mime_type = 'text/csv;charset=UTF-8';
+
+		header('Content-Disposition: inline; filename="'.$file_name.'"');
+		header('Content-Type: '.$mime_type);
+		echo implode(',', $title) . "\r\n";
+			
+			
+		$posts = get_posts(
+					array(
+						'posts_per_page' => 1000
+					));
+
+		foreach ( $posts as $post ) {
+			$csv = array();
+			$csv[] = '"' . $post->ID . '"';
+			$csv[] = '"' . get_the_title($post->ID) . '"';
+			$csv[] = '"' . intval(get_post_meta( $post->ID, '_wp_one_metric', true )) . '"';
+			
+			echo implode(',', $csv) . "\r\n";
+		}
+		unset($csv);
+		exit;
+	}
+
+	public function restrict_manage_posts() {
+		if ( get_post_type() != 'post' ) {
+			return;
+		}
+?>
+<input type="submit" name="submit" id="wp-one-metric-csv" class="button button-secondary" value="<?php _e( 'WP One Metric CSV Download', WPOMC_DOMAIN ) ?>"  />
+<?php wp_nonce_field('wp_metric_csv'); ?>
+<?php
+	}
+
 	public function admin_init() {
 		if ( isset($_POST['wp_metric_analyze']) ) {
 			check_admin_referer('wp_metric_analyze');
