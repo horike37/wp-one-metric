@@ -2,13 +2,13 @@
 Welcome to the official repository for WP One Metric WordPress plugin. The latest stable version is available from the [WordPress Plugin Directory](https://wordpress.org/plugins/wp-one-metric/).
 
 # Description
-This plugins visualizes the evaluation of your post content based on the score of [One Content Metric to Rule Them All](http://moz.com/blog/one-metric).
+This plugin visualizes the evaluation of your post content based on the score of [One Content Metric to Rule Them All](http://moz.com/blog/one-metric).
 This analyzes the latest 40 posts. After that, it analyzes once a day and automatically update the score.
 
 Analyses are based on the following numbers as the score:
 - Unique page views by Google Analytics
-- Number of shares with Facebook
-- Number of shares with Twitter
+- Number of shares on Facebook
+- Number of shares on Twitter
 
 
 ## How use
@@ -20,7 +20,7 @@ Analyses are based on the following numbers as the score:
 
 You can send your own language pack to me.
 
-Please contact to me.
+Please contact me.
 
 * horike37@gmail.com
 
