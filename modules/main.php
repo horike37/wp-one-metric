@@ -45,7 +45,7 @@ class WP_One_Metric {
 			return;
 		}
 		
-		$file_name = 'user_'.time().'.csv';
+		$file_name = 'wp_one_metric_'.time().'.csv';
 		$title = array();
 		$title[] = __('ID');
 		$title[] = __('Title');
