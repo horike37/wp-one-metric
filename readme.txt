@@ -36,7 +36,7 @@ Please contact me.
 
 == Installation ==
 
-1. Upload `simple-ga-ranking` to the `/wp-content/plugins/` directory.
+1. Upload `wp-one-metric` to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 
 == Screenshots ==
