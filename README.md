@@ -34,4 +34,6 @@ Please contact me.
 
 ## Changelog
 = 1.0 =
-* First release. 
+* First release.
+= 1.1 =
+* Add function CSV Download. 

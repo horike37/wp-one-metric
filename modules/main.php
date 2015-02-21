@@ -25,8 +25,6 @@ class WP_One_Metric {
 		}
 		
 		$this->posts = $posts;
-//analyze debug
-//		add_action( 'admin_init', array( $this, 'analyze' ) );
 
 		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'wp_one_metric', array( $this, 'analyze' ) );
@@ -49,7 +47,7 @@ class WP_One_Metric {
 		$title = array();
 		$title[] = __('ID');
 		$title[] = __('Title');
-		$title[] = __('Metric', WPOMC_DOMAIN);
+		$title[] = __('One Metric', WPOMC_DOMAIN);
 		$mime_type = 'text/csv;charset=UTF-8';
 
 		header('Content-Disposition: inline; filename="'.$file_name.'"');
@@ -79,7 +77,7 @@ class WP_One_Metric {
 			return;
 		}
 ?>
-<input type="submit" name="submit" id="wp-one-metric-csv" class="button button-secondary" value="<?php _e( 'WP One Metric CSV Download', WPOMC_DOMAIN ) ?>"  />
+<input type="submit" name="submit" id="wp-one-metric-csv" class="button button-secondary" value="<?php _e( 'One Metric CSV Download', WPOMC_DOMAIN ) ?>"  />
 <?php wp_nonce_field('wp_metric_csv'); ?>
 <?php
 	}

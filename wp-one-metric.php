@@ -2,9 +2,9 @@
 /*
 Plugin Name: WP One Metric
 Plugin URI: https://github.com/horike37/wp-one-metric
-Description: <a href="http://moz.com/blog/one-metric" target="__blank">One Content Metric to Rule Them All</a>の指標に基づき、コンテンツの評価を可視化する事ができるプラグインです。
+Description: This plugins visualizes the evaluation of your post content based on the score of <a href="http://moz.com/blog/one-metric" target="__blank">One Content Metric</a> to Rule Them All. 
 Author: horike
-Version: 1.0
+Version: 1.1
 Author URI: https://github.com/horike37/wp-one-metric
 Domain Path: /languages
 

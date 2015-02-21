@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP One Metric 1.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-one-metric\n"
-"POT-Creation-Date: 2015-02-11 08:50:41+00:00\n"
+"POT-Creation-Date: 2015-02-21 05:14:52+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,22 +37,34 @@ msgid "View ID"
 msgstr "ビューID"
 
 #: modules/admin.php:61
-msgid "Please input View ID in Admin > Veiw Setting on Google Analytics"
+msgid "Please input View ID in Admin > View Setting on Google Analytics"
 msgstr "Google Analyticsの「アナリティクス設定 > ビュー設定」にあるビューIDを入力してください"
+
+#: modules/main.php:48
+msgid "ID"
+msgstr ""
+
+#: modules/main.php:49
+msgid "Title"
+msgstr ""
+
+#: modules/main.php:50 modules/main.php:267
+msgid "One Metric"
+msgstr ""
+
+#: modules/main.php:80
+msgid "One Metric CSV Download"
+msgstr "One Metric CSVダウンロード"
 
 #. #-#-#-#-#  wp-one-metric.pot (WP One Metric 1.0)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: modules/main.php:48 modules/main.php:56
+#: modules/main.php:93 modules/main.php:101
 msgid "WP One Metric"
 msgstr ""
 
-#: modules/main.php:61
+#: modules/main.php:106
 msgid "Analyze"
 msgstr "解析"
-
-#: modules/main.php:222
-msgid "One Metric"
-msgstr ""
 
 #. #-#-#-#-#  wp-one-metric.pot (WP One Metric 1.0)  #-#-#-#-#
 #. Plugin URI of the plugin/theme
@@ -63,10 +75,13 @@ msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
+"This plugins visualizes the evaluation of your post content based on the "
+"score of <a href=\"http://moz.com/blog/one-metric\" target=\"__blank\">One "
+"Content Metric</a> to Rule Them All."
+msgstr ""
 "<a href=\"http://moz.com/blog/one-metric\" target=\"__blank\">One Content "
 "Metric to Rule Them All</a>の指標に基づき、コンテンツの評価を可視化する事がで"
 "きるプラグインです。"
-msgstr ""
 
 #. Author of the plugin/theme
 msgid "horike"
