@@ -3,7 +3,7 @@ Contributors: horike,megumithemes
 Tags: google analytics
 Requires at least: 4.1
 Tested up to: 4.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 
 This plugin visualizes the evaluation of your post content.
 
@@ -51,4 +51,6 @@ Horizontal axis: article
 = 1.1 =
 * Add function CSV Download. 
 = 1.1.1 =
+* Bug fix
+= 1.1.2 =
 * Bug fix

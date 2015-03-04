@@ -42,10 +42,7 @@ class WP_One_Metric {
 			return;
 		}
 	
-		$nonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : '';
-		if ( !wp_verify_nonce( $nonce, 'wp_metric_csv') ) {
-			return;
-		}
+		check_admin_referer('bulk-posts');
 		
 		$file_name = 'wp_one_metric_'.time().'.csv';
 		$title = array();
@@ -82,7 +79,6 @@ class WP_One_Metric {
 		}
 ?>
 <input type="submit" name="wp-one-metric-csv" id="wp-one-metric-csv" class="button button-secondary" value="<?php _e( 'One Metric CSV Download', WPOMC_DOMAIN ) ?>"  />
-<?php wp_nonce_field('wp_metric_csv'); ?>
 <?php
 	}
 

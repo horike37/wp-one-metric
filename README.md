@@ -40,3 +40,5 @@ Please contact me.
 * Add function CSV Download. 
 = 1.1.1 =
 * Bug fix
+= 1.1.2 =
+* Bug fix

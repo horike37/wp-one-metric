@@ -4,7 +4,7 @@ Plugin Name: WP One Metric
 Plugin URI: https://github.com/horike37/wp-one-metric
 Description: This plugins visualizes the evaluation of your post content based on the score of <a href="http://moz.com/blog/one-metric" target="__blank">One Content Metric</a> to Rule Them All. 
 Author: horike
-Version: 1.1.1
+Version: 1.1.2
 Author URI: https://github.com/horike37/wp-one-metric
 Domain Path: /languages
 
