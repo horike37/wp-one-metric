@@ -38,6 +38,10 @@ class WP_One_Metric {
 	}
 	
 	public function csv() {
+		if ( !isset($_REQUEST['wp-one-metric-csv']) ) {
+			return;
+		}
+	
 		$nonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : '';
 		if ( !wp_verify_nonce( $nonce, 'wp_metric_csv') ) {
 			return;
@@ -77,7 +81,7 @@ class WP_One_Metric {
 			return;
 		}
 ?>
-<input type="submit" name="submit" id="wp-one-metric-csv" class="button button-secondary" value="<?php _e( 'One Metric CSV Download', WPOMC_DOMAIN ) ?>"  />
+<input type="submit" name="wp-one-metric-csv" id="wp-one-metric-csv" class="button button-secondary" value="<?php _e( 'One Metric CSV Download', WPOMC_DOMAIN ) ?>"  />
 <?php wp_nonce_field('wp_metric_csv'); ?>
 <?php
 	}
