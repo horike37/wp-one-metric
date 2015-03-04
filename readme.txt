@@ -33,6 +33,7 @@ Please contact me.
 
 = Contributor(s) =
 * [Horike Takahiro](http://profiles.wordpress.org/horike)
+* [Kel DC](https://profiles.wordpress.org/kel-dc)
 
 == Installation ==
 
