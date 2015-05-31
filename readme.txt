@@ -2,8 +2,8 @@
 Contributors: horike,megumithemes
 Tags: google analytics
 Requires at least: 4.1
-Tested up to: 4.1
-Stable tag: 1.1.2
+Tested up to: 4.2
+Stable tag: 1.2
 
 This plugin visualizes the evaluation of your post content.
 
@@ -54,3 +54,5 @@ Horizontal axis: article
 * Bug fix
 = 1.1.2 =
 * Bug fix
+= 1.2 =
+* OAuth2 authorization available. ClientLogin is no longer available.

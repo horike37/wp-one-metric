@@ -4,7 +4,7 @@ Plugin Name: WP One Metric
 Plugin URI: https://github.com/horike37/wp-one-metric
 Description: This plugins visualizes the evaluation of your post content based on the score of <a href="http://moz.com/blog/one-metric" target="__blank">One Content Metric</a> to Rule Them All. 
 Author: horike
-Version: 1.1.2
+Version: 1.2
 Author URI: https://github.com/horike37/wp-one-metric
 Domain Path: /languages
 
@@ -27,20 +27,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 if ( ! defined( 'WPOMC_DOMAIN' ) )
 	define( 'WPOMC_DOMAIN', 'wp-one-metric' );
-	
-if ( ! defined( 'WPOMC_PLUGIN_URL' ) )
-	define( 'WPOMC_PLUGIN_URL', plugins_url() . '/' . dirname( plugin_basename( __FILE__ ) ));
-
-if ( ! defined( 'WPOMC_PLUGIN_DIR' ) )
-	define( 'WPOMC_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . dirname( plugin_basename( __FILE__ ) ));
 
 load_plugin_textdomain( WPOMC_DOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages' );
 
-if ( !class_exists( 'gapi' ) ) {
-	require_once( WPOMC_PLUGIN_DIR . '/lib/gapi.class.php' );
-}
-require_once( WPOMC_PLUGIN_DIR . '/modules/admin.php' );
-require_once( WPOMC_PLUGIN_DIR . '/modules/main.php' );
+include __DIR__.'/vendor/autoload.php';
+\Hametuha\GapiWP\Loader::load();
+$wp_one_metric_ga_api = \Hametuha\GapiWP\Loader::analytics();
+
+require_once( dirname(  __FILE__  ) . '/modules/main.php' );
 
 $wp_one_metric = new WP_One_Metric();
 register_activation_hook( __FILE__, array( $wp_one_metric, 'set_event' ) );

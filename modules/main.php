@@ -154,53 +154,54 @@ new Morris.Bar({
 	}
 	
 	public function get_ga_index() {
+		global $wp_one_metric_ga_api;
+
 		$ga_index = 0;
 		
 		$ids = array();
+		$uniquepageviews = array();
 		foreach ( $this->posts as $post ) {
 			$ids[] = $post->ID;
+			$uniquepageviews[$post->ID] = 0;
 		}	
-		$options = get_option('wpomc_options');
-		try {
-    		$ga = new gapi( $options['email'], $options['pass'] );
-    		$ga->requestReportData(
-    			$options['profile_id'],
-    			array('pagePath'),
-    			array('pageviews', 'uniquePageviews', 'exits' ),
-    			'-pageviews',
-    			'',
-    			date_i18n('Y-m-d', strtotime("-60 day")),
-    			date_i18n('Y-m-d'),
-    			1,
-    			1000
-    		);
 
-    		$sum = 0;
-    		$uniquepageviews = array();
-    		foreach($ga->getResults() as $result) {
-    			$post_id = url_to_postid(esc_url($result->getPagepath()));
-   			
-    			if ( $post_id == 0 )
+   		$args = array(
+   			'start-index' => 1,
+			'max-results' => 1000,
+			'dimensions'  => 'ga:pagePath',
+			'sort' => '-ga:uniquePageviews',
+		);
+		$results = $wp_one_metric_ga_api->fetch(date_i18n('Y-m-d', strtotime("-60 day")), date_i18n('Y-m-d'), 'ga:uniquePageviews', $args );
+
+    	$sum = 0;
+    	if ( !is_wp_error( $results ) ) {
+    		foreach($results->rows as $result) {
+    			$post_id = url_to_postid(esc_url($result[0]));
+
+				if ( $post_id == 0 )
     				continue;
-			
-    			if ( in_array( $post_id, $ids ) ) {
-    				$sum = $sum + $result->getUniquepageviews();
-    				if ( isset($uniquepageviews[$post_id]) ) {
-    					$uniquepageviews[$post_id] = $uniquepageviews[$post_id] + $result->getUniquepageviews();
-    				} else {
-	    				$uniquepageviews[$post_id] = $result->getUniquepageviews();
-    				}
-    			}
-    		}
-    		foreach ( $this->posts as $post ) {
-    			$this->results[$post->ID]['uniquepageviews'] = $uniquepageviews[$post->ID];
-    		}
- 			$this->ga_index = $sum / $this->target_num;
 
-
-    	} catch (Exception $e) {
-    		echo( 'Analytics API Error: ' . $e->getMessage() );
-    	}		
+				if ( in_array( $post_id, $ids ) ) {
+					$result[1] = intval($result[1]);
+    				$sum = $sum + $result[1];
+					if ( isset($uniquepageviews[$post_id]) ) {
+    					$uniquepageviews[$post_id] = $uniquepageviews[$post_id] + $result[1];
+					} else {
+	    				$uniquepageviews[$post_id] = $result[1];
+					}
+				}
+			}
+    	} else {
+	    	if ( is_super_admin() ) {
+	    		echo '<pre>';
+				var_dump($results);
+				echo '</pre>';
+			}
+    	}
+    	foreach ( $this->posts as $post ) {
+			$this->results[$post->ID]['uniquepageviews'] = $uniquepageviews[$post->ID];
+    	}
+ 		$this->ga_index = $sum / $this->target_num;
 	}
 	
 	public function get_twitter_index() {
@@ -285,3 +286,11 @@ new Morris.Bar({
 	}
 }
 
+add_action( 'admin_notices', 'wp_one_metric_admin_notice' );
+function wp_one_metric_admin_notice() {
+	$token = get_option('gapiwp_token');
+	
+	if ( $token == '' ) {
+		echo '<div class="error">WP One Metric is available OAuth2 authorization. Please set on <a href="'.admin_url('/options-general.php?page=gapiwp-analytics').'" >setting panel</a>. ClientLogin is no longer available. Please see <a href="https://developers.google.com/identity/protocols/AuthForInstalledApps" >this link</a></div>';
+	}
+}

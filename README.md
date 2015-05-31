@@ -42,3 +42,5 @@ Please contact me.
 * Bug fix
 = 1.1.2 =
 * Bug fix
+= 1.2 =
+* OAuth2 authorization available. ClientLogin is no longer available.
