@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/horike37/wp-one-metric.svg?branch=master)](https://travis-ci.org/horike37/wp-one-metric)
+
 # WP One Metric
 Welcome to the official repository for WP One Metric WordPress plugin. The latest stable version is available from the [WordPress Plugin Directory](https://wordpress.org/plugins/wp-one-metric/).
 
