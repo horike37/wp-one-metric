@@ -1,6 +1,6 @@
 {
-  "name": "simple-ga-ranking",
-  "description": "Simple GA Ranking",
+  "name": "WP One Metric",
+  "description": "This plugin visualizes the evaluation of your post content based on the score of One Content Metric to Rule Them All. ",
   "require": {
     "hametuha/gapiwp": "1.0.x"
   }
